@@ -1,62 +1,56 @@
 const accounts = [];
-//Account object needs balance and user name
-
-//create account(account)
-//push into array of accounts
-//return account
 
 const createAccount = account => {
   accounts.push(account);
   return account;
 };
 
-//getAccount(userName)
-//find matching account using forEach
 const getAccount = userName => {
   let matchedAccount;
-  accounts.forEach(account => {
-    if (account.userName === userName) {
-      matchedAccount = account;
+  for (let i = 0; i < accounts.length; i++) {
+    if (accounts[i].userName === userName) {
+      matchedAccount = accounts[i];
     }
-  });
+  }
   return matchedAccount;
 };
 
 //deposite
 const deposite = (account, amount) => {
-  account.balance = account.balance + amount;
+  if (typeof amount === "number") {
+    account.balance = account.balance + amount;
+  } else {
+    console.log("deposite failed, amount is not a number");
+  }
 };
 
 //withdraw
 const withdraw = (account, amount) => {
-  account.balance = account.balance - amount;
+  if (typeof amount === "number") {
+    account.balance = account.balance - amount;
+  } else {
+    console.log("withdraw failed, amount is not a number");
+  }
 };
 
 //getBalance
-const getBalance = (account, amount) => {
+const getBalance = account => {
   return account.balance;
 };
 
-//try out
+const createBalanceGetter = account => {
+  return function() {
+    return account.balance;
+  };
+};
 
-const syedasAccount = createAccount({
-  userName: "Syeda",
+//try out
+const dipty = createAccount({
+  userName: "dipty",
   balance: 0
 });
-
-deposite(syedasAccount, 1000);
-console.log(`SYEDA YOU GOT $ ${getBalance(syedasAccount)}`);
-withdraw(syedasAccount, 200);
-console.log(`WITHDRAW OF $ ${getBalance(syedasAccount)} IS SUCCESFUL`);
-
-const existingAccount = getAccount("Syeda");
-console.log(existingAccount);
-
-const isabelasAccount = createAccount({
-  username: "Isabela",
-  balance: 200
-});
-
-console.log(accounts);
-const exixtingIsabelasAccount = getAccount("Isabela");
-console.log(exixtingIsabelasAccount);
+deposite(dipty, 200);
+withdraw(dipty, 100);
+const isabela = getAccount("dipty");
+const getIsabelaBalance = createBalanceGetter(isabela);
+console.log(getIsabelaBalance());
